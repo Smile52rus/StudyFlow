@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <com.example.studyflow.ChartView
+        android:id="@+id/chart"
         android:layout_width="300dp"
         android:layout_height="400dp"
         app:lineColor="@color/design_default_color_primary_dark"

@@ -9,7 +9,6 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
-import androidx.core.graphics.blue
 
 class ChartView @JvmOverloads constructor(
     context: Context,
@@ -43,8 +42,9 @@ class ChartView @JvmOverloads constructor(
         isAntiAlias = true
     }
 
-    var markers: List<Marker> =
-        listOf(Marker(100, 30), Marker(150, 25), Marker(160, 40), Marker(200, 23), Marker(250, 34))
+    var markers: MutableList<Marker> =
+        mutableListOf(
+        )
 
     init {
         context.theme.obtainStyledAttributes(
@@ -55,6 +55,15 @@ class ChartView @JvmOverloads constructor(
         ).use {
             lineColor = it.getColor(R.styleable.ChartView_lineColor, 0)
         }
+    }
+
+    fun addMarker(marker: Marker) {
+        if (markers.isNotEmpty())
+            if (marker.x < markers.last().x) throw IllegalStateException() else
+                markers.add(marker)
+        else
+            markers.add(marker)
+        invalidate()
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -132,9 +141,7 @@ class ChartView @JvmOverloads constructor(
     }
 
     private fun getPositionX(marker: Marker): Float {
-        val pos =
-            ((marker.x - getMinValueX()) * getChartSizeSide(width)) / (getMaxValueX() - getMinValueX()) + PADDING
-        return pos
+        return ((marker.x - getMinValueX()) * getChartSizeSide(width)) / (getMaxValueX() - getMinValueX()) + PADDING
     }
 
     private fun getPositionY(marker: Marker): Float {

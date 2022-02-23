@@ -11,9 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class MainFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
+    private lateinit var chart: ChartView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,7 +28,8 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
-
+        chart = view.findViewById(R.id.chart)
+        for (i in 0..30) chart.addMarker(Marker(i, (0..50).random()) )
         return view
     }
 }
