@@ -1,23 +1,27 @@
 import javafx.application.Application.launch
 import kotlinx.coroutines.*
 import java.util.*
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 suspend fun main() {
-    coroutineScope {
-        val message1 = async { sum(1,5)}
-        val message2 = async { sum2(2,5) }
-        println(message1.await().toString() + "  " + message2.await().toString())
-        println("finish")
+    val ee: Example = Example()
+    println(ee.param)
+}
+
+class Example {
+    var param: String by Delegate()
+}
+
+class Delegate(): ReadWriteProperty<Any, String> {
+    private var trimmedValue: String = ""
+    override fun getValue(thisRef: Any, property: KProperty<*>): String {
+        println(property.name + thisRef.toString())
+        return property.name
     }
-}
 
-suspend fun sum(a: Int, b: Int): Int {
-    delay(2000)
-    return a + b
-}
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: String) {
+        trimmedValue = value.trim()
+    }
 
-suspend fun sum2(a: Int, b: Int): Int {
-    delay(200)
-    return a + b
 }
-
